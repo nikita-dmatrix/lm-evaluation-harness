@@ -204,151 +204,228 @@ def quantize_sbfp(tensor, bits = 4, block_size = 128, along_rows=False, ebias=No
         #print("=====")
         return tensor.transpose(-1,-2)
 
-Last login: Mon May 12 13:06:14 on ttys001
-ntrukhanov@ntrukhanov-macbook-air ~ % 
-ntrukhanov@ntrukhanov-macbook-air ~ % 
-ntrukhanov@ntrukhanov-macbook-air ~ % ssh coder.nikita-ml.main 
-ntrukhanov@ntrukhanov-macbook-air ~ % cat ~/.ssh/id_ed25519.pub 
-ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAINN2HRiBrWLpEh6qtDcYk5y5f/dB25Flh0yb1LYXOXCa ntrukhanov@d-matrix.ai
-ntrukhanov@ntrukhanov-macbook-air ~ % 
-ntrukhanov@ntrukhanov-macbook-air ~ % 
-ntrukhanov@ntrukhanov-macbook-air ~ % ssh coder.nikita-ml.main 
-==> ⧗ The workspace agent lost connection
-2025-05-15 15:51:56.555+01:00 Wait for it to reconnect or restart your workspace.
-2025-05-15 15:51:56.555+01:00 For more information and troubleshooting, see https://coder.com/docs/v2/latest/templates#agent-connection-issues and https://coder.com/docs/coder-oss/latest/templates#troubleshooting-templates
+def rotate_half(x):
+    """Rotates half the hidden dims of the input."""
+    x1 = x[..., : x.shape[-1] // 2]
+    x2 = x[..., x.shape[-1] // 2 :]
+    return torch.cat((-x2, x1), dim=-1)
 
 
-^C
-ntrukhanov@ntrukhanov-macbook-air ~ % 
-ntrukhanov@ntrukhanov-macbook-air ~ % 
-ntrukhanov@ntrukhanov-macbook-air ~ % 
-ntrukhanov@ntrukhanov-macbook-air ~ % ssh coder.nikita-ml.main 
-Encountered an error running "coder ssh"
-workspace "nikita-ml" has no agents
-ntrukhanov@ntrukhanov-macbook-air ~ % 
-ntrukhanov@ntrukhanov-macbook-air ~ % 
-ntrukhanov@ntrukhanov-macbook-air ~ % ssh coder.nikita-ml.main 
-==> ⧗ The workspace agent lost connection
-2025-05-15 16:13:51.586+01:00 Wait for it to reconnect or restart your workspace.
-2025-05-15 16:13:51.586+01:00 For more information and troubleshooting, see https://coder.com/docs/v2/latest/templates#agent-connection-issues and https://coder.com/docs/coder-oss/latest/templates#troubleshooting-templates
-^C
-ntrukhanov@ntrukhanov-macbook-air ~ % 
-ntrukhanov@ntrukhanov-macbook-air ~ % 
-ntrukhanov@ntrukhanov-macbook-air ~ % 
-ntrukhanov@ntrukhanov-macbook-air ~ % 
-ntrukhanov@ntrukhanov-macbook-air ~ % 
-ntrukhanov@ntrukhanov-macbook-air ~ % ssh coder.nikita-ml.main 
-(main) coder@coder-nikita-dmatrix-nikita-ml:~$ 
-(main) coder@coder-nikita-dmatrix-nikita-ml:~$ 
-(main) coder@coder-nikita-dmatrix-nikita-ml:~$ ./startup.sh 
-Reading package lists... Done
-Building dependency tree... Done
-Reading state information... Done
-The following additional packages will be installed:
-  libevent-core-2.1-7 libutempter0
-The following NEW packages will be installed:
-  libevent-core-2.1-7 libutempter0 tmux
-0 upgraded, 3 newly installed, 0 to remove and 166 not upgraded.
-Need to get 531 kB of archives.
-After this operation, 1365 kB of additional disk space will be used.
-Get:1 http://archive.ubuntu.com/ubuntu jammy/main amd64 libevent-core-2.1-7 amd64 2.1.12-stable-1build3 [93.9 kB]
-Get:2 http://archive.ubuntu.com/ubuntu jammy/main amd64 libutempter0 amd64 1.2.1-2build2 [8848 B]
-Get:3 http://archive.ubuntu.com/ubuntu jammy-updates/main amd64 tmux amd64 3.2a-4ubuntu0.2 [428 kB]
-Fetched 531 kB in 1s (401 kB/s)
-debconf: delaying package configuration, since apt-utils is not installed
-Selecting previously unselected package libevent-core-2.1-7:amd64.
-(Reading database ... 85815 files and directories currently installed.)
-Preparing to unpack .../libevent-core-2.1-7_2.1.12-stable-1build3_amd64.deb ...
-Unpacking libevent-core-2.1-7:amd64 (2.1.12-stable-1build3) ...
-Selecting previously unselected package libutempter0:amd64.
-Preparing to unpack .../libutempter0_1.2.1-2build2_amd64.deb ...
-Unpacking libutempter0:amd64 (1.2.1-2build2) ...
-Selecting previously unselected package tmux.
-Preparing to unpack .../tmux_3.2a-4ubuntu0.2_amd64.deb ...
-Unpacking tmux (3.2a-4ubuntu0.2) ...
-Setting up libevent-core-2.1-7:amd64 (2.1.12-stable-1build3) ...
-Setting up libutempter0:amd64 (1.2.1-2build2) ...
-Setting up tmux (3.2a-4ubuntu0.2) ...
-Processing triggers for man-db (2.10.2-1) ...
-Processing triggers for libc-bin (2.35-0ubuntu3.1) ...
-(main) coder@coder-nikita-dmatrix-nikita-ml:~$ 
-(main) coder@coder-nikita-dmatrix-nikita-ml:~$ 
-(main) coder@coder-nikita-dmatrix-nikita-ml:~$ ls
-Capsaicin			   eleuther_tasks.txt  keval	  kveval     lm-evaluation-harness  miniconda3	   notebooks	 startup.sh  transformers
-Miniconda3-latest-Linux-x86_64.sh  fullevalpre	       kevalpost  llama.cpp  lost+found		    my_perplexity  perp_eval.py  tmpeval     weval
-(main) coder@coder-nikita-dmatrix-nikita-ml:~$ 
-(main) coder@coder-nikita-dmatrix-nikita-ml:~$ 
-(main) coder@coder-nikita-dmatrix-nikita-ml:~$ cd lm-evaluation-harness/lm_eval
-(main) coder@coder-nikita-dmatrix-nikita-ml:~/lm-evaluation-harness/lm_eval$ git diff
-diff --git a/lm_eval/evaluator.py b/lm_eval/evaluator.py
-diff --git a/lm_eval/evaluator.py b/lm_eval/evaluator.py
-index 9c94fa54..b8eaec3a 100644
---- a/lm_eval/evaluator.py
-+++ b/lm_eval/evaluator.py
-@@ -9,6 +9,8 @@ from typing import TYPE_CHECKING, List, Optional, Union
- import numpy as np
- import torch
- 
-+from .llama_sbfp import wrap_model, wrap_model_weights
-+
- import lm_eval.api.metrics
- import lm_eval.api.registry
- import lm_eval.api.task
-@@ -293,9 +295,9 @@ def simple_evaluate(
-     print(type(lm))
-     print(type(lm.model))
-     print(type(lm.model.model.layers[0].self_attn))
--    from .llama_hack_sbfp_new import wrap_model, wrap_model_weights
-+    #from .opt_hack_sbfp_8 import wrap_model, wrap_model_weights
-     wrap_model_weights(lm.model)
--    wrap_model(lm.model, quantize=True, block_size=128)
-+    #wrap_model(lm.model, quantize=True, block_size=16)
- 
-     if evaluation_tracker is not None:
-         evaluation_tracker.general_config_tracker.log_experiment_args(
-diff --git a/lm_eval/llama_hack_sbfp_new.py b/lm_eval/llama_hack_sbfp_new.py
-index 6c02d321..24dcbd0c 100644
---- a/lm_eval/llama_hack_sbfp_new.py
-+++ b/lm_eval/llama_hack_sbfp_new.py
-@@ -9,6 +9,7 @@ import scipy
- import torch
- import torch.utils.checkpoint
- from torch import nn
-+import torch.nn.functional as F
- from torch.nn import BCEWithLogitsLoss, CrossEntropyLoss, MSELoss
- import transformers
- from transformers import Cache
-@@ -50,17 +51,41 @@ def quantize_sbfp(tensor, bits = 4, block_size = 128, along_rows=False):
-     else:
-         tensor = tensor.transpose(-1,-2)
-         shape = tensor.shape
-+
-+        #assert shape[-1] % block_size == 0, f"shape {shape} not divisible by block_size"
-+        if (shape[-1] % block_size) != 0:
-+            #print(shape)
-+            tensor = F.pad(tensor, (0, block_size - (shape[-1] % block_size )), "constant", 0)
-+        new_shape = tensor.shape
-+
-         tensor = tensor.reshape(-1, block_size)
-+
-+
-+        maxx = torch.max(torch.abs(tensor), dim = -1, keepdims=True).values
-+        maxx [ maxx < 6e-8] = 1.
-+
-(main) coder@coder-nikita-dmatrix-nikita-ml:~/lm-evaluation-harness/lm_eval$ q
-bash: q: command not found
-(main) coder@coder-nikita-dmatrix-nikita-ml:~/lm-evaluation-harness/lm_eval$ 
-(main) coder@coder-nikita-dmatrix-nikita-ml:~/lm-evaluation-harness/lm_eval$ ls
-__init__.py  caching		 falcon_fc_hack.py  llama_hack.py   llama_hack5.py   llama_hack_ln.py	     llama_hack_sbfp_norm.py  opt_hack.py	  output	ufpbfp
-__main__.py  decontamination	 filters	    llama_hack2.py  llama_hack6.py   llama_hack_sbfp.py      llama_sbfp.py	      opt_hack_ln.py	  prompts	util.py
-__pycache__  evaluator.py	 gemma_hack.py	    llama_hack3.py  llama_hack6v.py  llama_hack_sbfp_8.py    loggers		      opt_hack_sbfp_8.py  sbfp_results	utils.py
-api	     evaluator_utils.py  llama_fc_hack.py   llama_hack4.py  llama_hack7.py   llama_hack_sbfp_new.py  models		      opteval		  tasks
-(main) coder@coder-nikita-dmatrix-nikita-ml:~/lm-evaluation-harness/lm_eval$ vim evaluator.py 
-(main) coder@coder-nikita-dmatrix-nikita-ml:~/lm-evaluation-harness/lm_eval$ vim llama_sbfp.py 
+def apply_rotary_pos_emb(q, k, cos, sin, position_ids=None, unsqueeze_dim=1):
+    """Applies Rotary Position Embedding to the query and key tensors.
+
+    Args:
+        q (`torch.Tensor`): The query tensor.
+        k (`torch.Tensor`): The key tensor.
+        cos (`torch.Tensor`): The cosine part of the rotary embedding.
+        sin (`torch.Tensor`): The sine part of the rotary embedding.
+        position_ids (`torch.Tensor`, *optional*):
+            Deprecated and unused.
+        unsqueeze_dim (`int`, *optional*, defaults to 1):
+            The 'unsqueeze_dim' argument specifies the dimension along which to unsqueeze cos[position_ids] and
+            sin[position_ids] so that they can be properly broadcasted to the dimensions of q and k. For example, note
+            that cos[position_ids] and sin[position_ids] have the shape [batch_size, seq_len, head_dim]. Then, if q and
+            k have the shape [batch_size, heads, seq_len, head_dim], then setting unsqueeze_dim=1 makes
+            cos[position_ids] and sin[position_ids] broadcastable to the shapes of q and k. Similarly, if q and k have
+            the shape [batch_size, seq_len, heads, head_dim], then set unsqueeze_dim=2.
+    Returns:
+        `tuple(torch.Tensor)` comprising of the query and key tensors rotated using the Rotary Position Embedding.
+    """
+    cos = cos.unsqueeze(unsqueeze_dim)
+    sin = sin.unsqueeze(unsqueeze_dim)
+    q_embed = (q * cos) + (rotate_half(q) * sin)
+    k_embed = (k * cos) + (rotate_half(k) * sin)
+    return q_embed, k_embed
+
+def repeat_kv(hidden_states: torch.Tensor, n_rep: int) -> torch.Tensor:
+    """
+    This is the equivalent of torch.repeat_interleave(x, dim=1, repeats=n_rep). The hidden states go from (batch,
+    num_key_value_heads, seqlen, head_dim) to (batch, num_attention_heads, seqlen, head_dim)
+    """
+    batch, num_key_value_heads, slen, head_dim = hidden_states.shape
+    if n_rep == 1:
+        return hidden_states
+    hidden_states = hidden_states[:, :, None, :, :].expand(batch, num_key_value_heads, n_rep, slen, head_dim)
+    return hidden_states.reshape(batch, num_key_value_heads * n_rep, slen, head_dim)
+
+
+class LlamaAttentionWrapperQK(nn.Module):
+    """Multi-headed attention from 'Attention Is All You Need' paper"""
+
+    def __init__(self, attention, quantize=False, reorder=False, pnorm=2, block_size=128):
+        super().__init__()
+        for attr, val in attention.__dict__.items():
+            #print(attr)
+            self.__setattr__(attr, val)
+        #self.Kactivation = None
+
+        self.quantize = quantize
+        self.reorder = reorder
+        self.block_size=block_size
+
+        self.dtype = self.k_proj.get_parameter('weight').data.dtype
 
 
 
+
+    def forward(
+        self,
+        hidden_states: torch.Tensor,
+        attention_mask: Optional[torch.Tensor] = None,
+        position_ids: Optional[torch.LongTensor] = None,
+        past_key_value: Optional[Cache] = None,
+        output_attentions: bool = False,
+        use_cache: bool = False,
+        cache_position: Optional[torch.LongTensor] = None,
+        **kwargs,
+    ) -> Tuple[torch.Tensor, Optional[torch.Tensor], Optional[Tuple[torch.Tensor]]]:
+        bsz, q_len, _ = hidden_states.size()
+
+        if self.config.pretraining_tp > 1:
+            key_value_slicing = (self.num_key_value_heads * self.head_dim) // self.config.pretraining_tp
+            query_slices = self.q_proj.weight.split(
+                (self.num_heads * self.head_dim) // self.config.pretraining_tp, dim=0
+            )
+            key_slices = self.k_proj.weight.split(key_value_slicing, dim=0)
+            value_slices = self.v_proj.weight.split(key_value_slicing, dim=0)
+
+            query_states = [F.linear(hidden_states, query_slices[i]) for i in range(self.config.pretraining_tp)]
+            query_states = torch.cat(query_states, dim=-1)
+
+            key_states = [F.linear(hidden_states, key_slices[i]) for i in range(self.config.pretraining_tp)]
+            key_states = torch.cat(key_states, dim=-1)
+
+            value_states = [F.linear(hidden_states, value_slices[i]) for i in range(self.config.pretraining_tp)]
+            value_states = torch.cat(value_states, dim=-1)
+
+        else:
+            query_states = self.q_proj(hidden_states)
+            key_states = self.k_proj(hidden_states)
+            value_states = self.v_proj(hidden_states)
+
+        query_states = query_states.view(bsz, q_len, self.num_heads, self.head_dim).transpose(1, 2)
+        key_states = key_states.view(bsz, q_len, self.num_key_value_heads, self.head_dim).transpose(1, 2)
+        value_states = value_states.view(bsz, q_len, self.num_key_value_heads, self.head_dim).transpose(1, 2)
+        #self.Kactivation = key_states.cpu()
+
+        if self.quantize:
+            #UNUSED WRAPPER!
+            #query_states = quantize_bfp(query_states.float(), 8, self.block_size, True).to(self.dtype)
+            key_states = quantize_sbfp(key_states.float(), 4, self.block_size, True).to(self.dtype)
+            value_states = quantize_sbfp(value_states.float(), 4, self.block_size, False).to(self.dtype)
+
+        past_key_value = getattr(self, "past_key_value", past_key_value)
+        cos, sin = self.rotary_emb(value_states, position_ids)
         query_states, key_states = apply_rotary_pos_emb(query_states, key_states, cos, sin)
+
+        if past_key_value is not None:
+            # sin and cos are specific to RoPE models; position_ids needed for the static cache
+            cache_kwargs = {"sin": sin, "cos": cos, "cache_position": cache_position}
+            key_states, value_states = past_key_value.update(key_states, value_states, self.layer_idx, cache_kwargs)
+
+        key_states = repeat_kv(key_states, self.num_key_value_groups)
+        value_states = repeat_kv(value_states, self.num_key_value_groups)
+
+        attn_weights = torch.matmul(query_states, key_states.transpose(2, 3)) / math.sqrt(self.head_dim)
+
+        if attention_mask is not None:  # no matter the length, we just slice it
+            causal_mask = attention_mask
+            if cache_position is not None:
+                causal_mask = attention_mask[:, :, cache_position, : key_states.shape[-2]]
+            attn_weights = attn_weights + causal_mask
+
+        # upcast attention to fp32
+        attn_weights = nn.functional.softmax(attn_weights, dim=-1, dtype=torch.float32).to(query_states.dtype)
+        attn_weights = nn.functional.dropout(attn_weights, p=self.attention_dropout, training=self.training)
+        attn_output = torch.matmul(attn_weights, value_states)
+
+        if attn_output.size() != (bsz, self.num_heads, q_len, self.head_dim):
+            raise ValueError(
+                f"`attn_output` should be of size {(bsz, self.num_heads, q_len, self.head_dim)}, but is"
+                f" {attn_output.size()}"
+            )
+
+        attn_output = attn_output.transpose(1, 2).contiguous()
+
+        attn_output = attn_output.reshape(bsz, q_len, self.hidden_size)
+
+        if self.config.pretraining_tp > 1:
+            attn_output = attn_output.split(self.hidden_size // self.config.pretraining_tp, dim=2)
+            o_proj_slices = self.o_proj.weight.split(self.hidden_size // self.config.pretraining_tp, dim=1)
+            attn_output = sum([F.linear(attn_output[i], o_proj_slices[i]) for i in range(self.config.pretraining_tp)])
+        else:
+            attn_output = self.o_proj(attn_output)
+
+        if not output_attentions:
+            attn_weights = None
+
+        return attn_output, attn_weights, past_key_value
+class LlamaSDPAAttentionWrapper(nn.Module):
+    """Multi-headed attention from 'Attention Is All You Need' paper"""
+
+    def __init__(self, attention, quantize=False, reorder=False, pnorm=2, block_size=128):
+        super().__init__()
+        for attr, val in attention.__dict__.items():
+            #print(attr)
+            self.__setattr__(attr, val)
+        #self.Kactivation = None
+
+        self.quantize = quantize
+        self.reorder = reorder
+        self.block_size=block_size
+
+        self.dtype = self.k_proj.get_parameter('weight').data.dtype
+
+    def forward(
+        self,
+        hidden_states: torch.Tensor,
+        attention_mask: Optional[torch.Tensor] = None,
+        position_ids: Optional[torch.LongTensor] = None,
+        past_key_value: Optional[Cache] = None,
+        output_attentions: bool = False,
+        use_cache: bool = False,
+        cache_position: Optional[torch.LongTensor] = None,
+        position_embeddings: Optional[Tuple[torch.Tensor, torch.Tensor]] = None,  # will become mandatory in v4.45
+        **kwargs,
+    ) -> Tuple[torch.Tensor, Optional[torch.Tensor], Optional[Tuple[torch.Tensor]]]:
+        if output_attentions:
+            # TODO: Improve this warning with e.g. `model.config.attn_implementation = "manual"` once this is implemented.
+            logger.warning_once(
+                "LlamaModel is using LlamaSdpaAttention, but `torch.nn.functional.scaled_dot_product_attention` does not support `output_attentions=True`. Falling back to the manual attention implementation, "
+                'but specifying the manual implementation will be required from Transformers version v5.0.0 onwards. This warning can be removed using the argument `attn_implementation="eager"` when loading the model.'
+            )
+            return super().forward(
+                hidden_states=hidden_states,
+                attention_mask=attention_mask,
+                position_ids=position_ids,
+                past_key_value=past_key_value,
+                output_attentions=output_attentions,
+                use_cache=use_cache,
+                cache_position=cache_position,
+                position_embeddings=position_embeddings,
+            )
+
+        bsz, q_len, _ = hidden_states.size()
+
+        query_states = self.q_proj(hidden_states)
+        key_states = self.k_proj(hidden_states)
+        value_states = self.v_proj(hidden_states)
+
+        query_states = query_states.view(bsz, q_len, self.num_heads, self.head_dim).transpose(1, 2)
+        key_states = key_states.view(bsz, q_len, self.num_key_value_heads, self.head_dim).transpose(1, 2)
+        value_states = value_states.view(bsz, q_len, self.num_key_value_heads, self.head_dim).transpose(1, 2)
+
+        if position_embeddings is None:
+            logger.warning_once(
+                "The attention layers in this model are transitioning from computing the RoPE embeddings internally "
+                "through `position_ids` (2D tensor with the indexes of the tokens), to using externally computed "
+                "`position_embeddings` (Tuple of tensors, containing cos and sin). In v4.45 `position_ids` will be "
+                "removed and `position_embeddings` will be mandatory."
+            )
+            cos, sin = self.rotary_emb(value_states, position_ids)
+        else:
+            cos, sin = position_embeddings
+       query_states, key_states = apply_rotary_pos_emb(query_states, key_states, cos, sin)
 
         if self.quantize:
             #query_states = quantize_bfp(query_states.float(), 8, self.block_size, True).to(self.dtype)
@@ -400,8 +477,6 @@ api	     evaluator_utils.py  llama_fc_hack.py   llama_hack4.py  llama_hack7.py  
 
         return attn_output, None, past_key_value
 
-
-
 def wrap_model(model, quantize = False, reorder=False, pnorm=2, block_size=128):
     for idx in range(model.config.num_hidden_layers):
         model.model.layers[idx].self_attn = LlamaSDPAAttentionWrapper(model.model.layers[idx].self_attn, quantize, reorder, pnorm, block_size)
@@ -423,6 +498,7 @@ def wrap_model_weights(model):
         model.model.layers[idx].mlp.gate_proj.weight.data = quantize_weight(model.model.layers[idx].mlp.gate_proj.weight.data)
         model.model.layers[idx].mlp.up_proj.weight.data = quantize_weight(model.model.layers[idx].mlp.up_proj.weight.data)
         model.model.layers[idx].mlp.down_proj.weight.data = quantize_weight(model.model.layers[idx].mlp.down_proj.weight.data)
+
 
 
 
